@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="de">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Math Demo</title>
+        <script src="script.js"></script>
+    </head>
+    <body>
+        <!--Exercise 2. a)-->
+        <h1>Nullstellen quadratischer Polynome</h1>
+        <p>
+            Dieses Programm berechnet Nullstellen quadratischer Polynome der Form ax² + bx + c
+            und stellt die Lösungen im Intervall x ∈ [-10, 10] grafisch dar.
+        </p>
+        <label for="value_a">a:
+            <input id="value_a" type="number" value=""/>
+        </label>
+        <label for="value_b">b:
+            <input id="value_b" type="number" value=""/>
+        </label>
+        <label for="value_c">c:
+            <input id="value_c" type="number" value=""/>
+        </label>
+
+        <br/><br/>
+
+        <button id="btn" type="submit">Nullstellen berechnen</button>
+
+        <br/>
+
+        <!--Exercise 2. b)-->
+        <div id=solution></div>
+
+        <!--Exercise 2. c)-->
+        <canvas id="canvas"></canvas>
+
+    </body>
+</html>
