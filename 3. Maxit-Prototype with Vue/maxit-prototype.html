@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Maxit</title>
+</head>
+<body>
+<h1>Maxit</h1>
+<div id="app">
+    <p :style="getActivePlayerStyle(0)">Score Player 1: {{ scorePlayer1 }} </p>
+    <p :style="getActivePlayerStyle(1)">Score Player 2: {{ scorePlayer2 }} </p>
+    <br><br>
+    <div class="flex-container">
+        <div
+                v-for="(card, index) in pictureCards"
+                :key="index"
+                @click="clickMethod(index)"
+        >
+            <img v-if="isDiscovered(index)" :src="background" />
+            <img v-else-if="isActiveRowColumn(index)" :src="card.pic" />
+            <img v-else :src="card.pic" class="blur" />
+        </div>
+    </div>
+</div>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            scorePlayer1: 0,
+            scorePlayer2: 0,
+            activeRow: 4,
+            activeColumn: 4,
+            activePlayer: 0,
+            background: 'img/invis.gif',
+            pictureCards: [] ,
+            discoveredCards: 0,
+            gridSize: 8
+        },
+        methods : {
+            getColumnIndex(index) { return index % this.gridSize; },
+            getRowIndex(index) { return Math.floor(index / this.gridSize); },
+            isActiveRowColumn ( index ) {
+                if (this.activePlayer == 0) {
+                    return this.getRowIndex(index) == this.activeRow;
+                } else {
+                    return this.getColumnIndex(index) == this.activeColumn;
+                }
+            },
+            isDiscovered(index) {
+                return this.pictureCards[index].discovered;
+            },
+            clickMethod(index) {
+                if (this.isActiveRowColumn(index) && !this.pictureCards[index].discovered) {
+                    /* Exercise a) 2 Spieler
+                    if (this.activePlayer === 0 && this.isActiveRowColumn(index)) {
+                        this.scorePlayer1 += this.pictureCards[index].value;
+                        this.pictureCards[index].discovered = true;
+                        this.discoveredCards++;
+                        // Nächster Spieler: Player 2
+                        this.activePlayer = 1;
+                        this.activeColumn = this.getColumnIndex(index); // Aktive Spalte wird aktualisiert
+                    } else if (this.activePlayer === 1 && this.isActiveRowColumn(index)) {
+                        this.scorePlayer2 += this.pictureCards[index].value;
+                        this.pictureCards[index].discovered = true;
+                        this.discoveredCards++;
+                        // Nächster Spieler: Player 1
+                        this.activePlayer = 0;
+                        this.activeRow = this.getRowIndex(index); // Aktive Zeile wird aktualisiert
+                    }
+                    */
+                    /* Exercise b) 1 Spieler (& Computer) */
+                    if (this.activePlayer === 0 && this.isActiveRowColumn(index)) {
+                        this.scorePlayer1 += this.pictureCards[index].value;
+                        this.pictureCards[index].discovered = true;
+                        // Nächster Spieler: Player 2 (Computer)
+                        this.activePlayer = 1;
+                        this.activeColumn = this.getColumnIndex(index); // Aktive Spalte wird aktualisiert
+                        this.discoveredCards++;
+                        // Computer ist an der Reihe
+                        this.computerMove();
+                    }
+                }
+            },
+            computerMove() {
+                let bestIndex = null;
+
+                // Finde den Zeilenindex, der den Score für den Spieler maximiert
+                for (let i = 0; i < this.gridSize; i++) {
+                    let highestMax = 0
+                    const currentMax = Math.max(this.maxRowValue(i), this.maxColumnValue(this.activeColumn));
+                    if (currentMax > highestMax) {
+                        highestMax = currentMax
+                        bestIndex = i;
+                    }
+                }
+
+                let finalIndex = bestIndex * this.gridSize + this.activeColumn;
+
+                // Fortsetzen der Suche nach einem gültigen Index,
+                // wenn der bisherige Index schon ausgewählt wurde.
+                if (this.pictureCards[finalIndex].discovered) {
+                    let attempts = 0;
+                    while (this.pictureCards[finalIndex].discovered && attempts < this.gridSize) {
+                        bestIndex = (bestIndex + 1) % this.gridSize;
+                        finalIndex = bestIndex * this.gridSize + this.activeColumn;
+                        attempts++;
+                    }
+                }
+
+                this.scorePlayer2 += this.pictureCards[finalIndex].value;
+                this.pictureCards[finalIndex].discovered = true;
+                this.discoveredCards++;
+                // Spieler ist an der Reihe
+                this.activePlayer = 0;
+                this.activeRow = this.getRowIndex(finalIndex);
+
+            },
+            maxColumnValue(columnIndex) {
+                let max = 0;
+
+                // Suchen Index mit dem Maximalwert in der angegebenen Spalte,
+                // welcher noch nicht ausgewählt wurde.
+                for (let i = 0; i < this.gridSize; i++) {
+                    const index = i * this.gridSize + columnIndex;
+                    if (!this.pictureCards[index].discovered && this.pictureCards[index].value > max) {
+                        max = this.pictureCards[index].value;
+                    }
+                }
+                return max;
+            },
+            maxRowValue(rowIndex) {
+                let max = 0;
+
+                // Suchen Index mit dem Maximalwert in der angegebenen Zeile,
+                // welcher noch nicht ausgewählt wurde.
+                for (let j = 0; j < this.gridSize; j++) {
+                    const index = rowIndex * this.gridSize + j;
+                    if (!this.pictureCards[index].discovered && this.pictureCards[index].value > max) {
+                        max = this.pictureCards[index].value;
+                    }
+                }
+                return max;
+            },
+        },
+        mounted() {
+            const image_positives = [
+                { pic: 'img/p1.png', value: 1, discovered: false },
+                { pic: 'img/p2.png', value: 2, discovered: false },
+                { pic: 'img/p3.png', value: 3, discovered: false },
+                { pic: 'img/p4.png', value: 4, discovered: false },
+                { pic: 'img/p5.png', value: 5, discovered: false },
+                { pic: 'img/p6.png', value: 6, discovered: false },
+                { pic: 'img/p7.png', value: 7, discovered: false },
+                { pic: 'img/p8.png', value: 8, discovered: false },
+                { pic: 'img/p9.png', value: 9, discovered: false },
+                { pic: 'img/p10.png', value: 10, discovered: false }
+            ];
+
+            const image_negatives = [
+                { pic: 'img/m1.png', value: -1, discovered: false },
+                { pic: 'img/m2.png', value: -2, discovered: false },
+                { pic: 'img/m3.png', value: -3, discovered: false },
+                { pic: 'img/m4.png', value: -4, discovered: false },
+                { pic: 'img/m5.png', value: -5, discovered: false },
+                { pic: 'img/m6.png', value: -6, discovered: false },
+                { pic: 'img/m7.png', value: -7, discovered: false },
+                { pic: 'img/m8.png', value: -8, discovered: false },
+                { pic: 'img/m9.png', value: -9, discovered: false },
+                { pic: 'img/m10.png', value: -10, discovered: false }
+            ];
+
+            const images = new Array(this.gridSize * this.gridSize);
+            for (var i = 0; i < images.length / 2; i++) {
+                images[i] = image_positives[Math.floor(Math.random() * image_positives.length)];
+                images[i+images.length/2] = image_negatives[Math.floor(Math.random() * image_negatives.length ) ];
+            }
+            const shuffleArray = array => {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+            }
+            shuffleArray(images) ;
+            this.pictureCards= JSON.parse(JSON.stringify(images));
+        },
+        computed : {
+            // Bonus: See which Player's turn it is currently
+            getActivePlayerStyle: function() {
+                return function(playerNumber) {
+                    if (this.activePlayer === playerNumber) {
+                        return { fontWeight: 'bold' };
+                    } else {
+                        return {};
+                    }
+                };
+            }
+        }
+    });
+</script>
+</html>
+
+<style>
+    img {
+        width: 100px;
+    }
+
+    .blur{
+        filter: opacity(50%);
+    }
+
+    .flex-container {
+        display: flex;
+        width: 840px;
+        gap: 5px;
+        justify-content: space-around;
+        flex-flow: row wrap;
+    }
+
+    .bold {
+        font-weight: bold;
+    }
+</style>
