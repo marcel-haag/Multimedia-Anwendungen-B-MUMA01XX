@@ -1,5 +1,5 @@
 # Multimedia-Applications-B-MUMA01XX
-**Basic challenges with Python, Vue.js, HTML and PHP** 
+**Basic challenges with HTML, Vue.js, Python and Django** 
 
 ### `Used Versions`
 python: `v.3.9.0` \
@@ -7,7 +7,7 @@ node: `v.20.11.0`
 
 ### `1. Huffman Encoding (Python)`
 **Example usage:** \
-python3 huffman.py "Das ist ein kurzer Satz"
+`python3 huffman.py "Das ist ein kurzer Satz"`
 
 ### `2. Zeroing of quadratic polynomials (HTML & JS)`
 * Open HTML locally
@@ -19,8 +19,12 @@ Install modules \
 Build app \
 `npm build` \
 Run app \
-`npm satrt`
+`npm start`
 
-### `4. ToDo App (HTML & PHP)`
-Compile java file \
-* Open HTML locally
+### `4. ToDo App (django)`
+**Example usage:** \
+`pip3 install django` \
+`python3 manage.py makemigrations` \
+`python3 manage.py migrate` \
+`python3 manage.py runserver` \
+Visit `http://127.0.0.1:8000/completetodo/`

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="de">
+    <head>
+        <meta charset="utf-8">
+        <title>Todo App</title>
+    </head>
+    <body>
+        <!--Exercise 4.-->
+        <h1>Todo App</h1>
+
+        <h2>Neues Todo anlegen</h2>
+        <form method="post">
+            {% csrf_token %}
+            Text: <input type="text" name="todo_text">
+            <br/><br/>
+            <button type="submit">Neues Todo anlegen</button>
+        </form>
+
+        <h2>Offene Todos</h2>
+        <form method="post">
+            {% csrf_token %}
+            <ul>
+                {% for todo in open_todos %}
+                    <li>
+                        <label>
+                            <input type="radio" name="complete_todo" value="{{ forloop.counter0 }}">
+                            {{ todo.text }}
+                        </label>
+                    </li>
+                {% endfor %}
+            </ul>
+            <button type="submit" name="action" value="complete"
+                {% if open_todos|length == 0 %}disabled{% endif %}>
+                Todo erledigt
+            </button>
+        </form>
+
+        <h2>Erledigte Todos</h2>
+        <ul>
+            {% for todo in completed_todos %}
+                <li>{{ todo.text }} - Erledigt am: {{ todo.completed_at }}</li>
+            {% endfor %}
+        </ul>
+
+    </body>
+</html>

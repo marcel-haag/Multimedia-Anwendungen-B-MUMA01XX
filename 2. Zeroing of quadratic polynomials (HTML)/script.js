@@ -10,8 +10,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // Canvas für Grafen
         var canvas = document.getElementById("canvas")
-        canvas.width = 600; // Breite des Canvas-Elements
-        canvas.height = 400; // Höhe des Canvas-Elements
+        canvas.width = 600;
+        canvas.height = 400;
         document.body.appendChild(canvas);
 
         var ctx = canvas.getContext("2d");
@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     ctx.fill();
                 }
             } else {
-                console.warn("No zero points available to draw a parabola");
+                console.warn("Keine Nullstellen in der Parabel.");
             }
         };
 
@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function() {
             // Graf präsentieren
             drawGraph(value_a, value_b, value_c, nullstellen);
         } else {
-            alert("Please enter valid numbers.")
+            alert("Bitte valide Zahlen verwenden.")
         }
     })
 });
