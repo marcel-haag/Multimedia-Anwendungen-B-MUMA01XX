@@ -2,24 +2,17 @@
 **Basic challenges with HTML, Vue.js, Python and Django** 
 
 ### `Used Versions`
-python: `v.3.9.0` \
-node: `v.20.11.0`
+python: `v.3.9.0` 
 
 ### `1. Huffman Encoding (Python)`
 **Example usage:** \
 `python3 huffman.py "Das ist ein kurzer Satz"`
 
 ### `2. Zeroing of quadratic polynomials (HTML & JS)`
-* Open HTML locally
-
+* Open HTML locally in Browser
 
 ### `3. Maxit-Prototype (Vue.js)`
-Install modules \
-`npm install` \
-Build app \
-`npm build` \
-Run app \
-`npm start`
+* Open HTML locally in Browser
 
 ### `4. ToDo App (django)`
 **Example usage:** \
